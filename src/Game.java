@@ -15,7 +15,7 @@ public class Game {
     {
         try {
        
-           Scanner in = new Scanner ( new FileReader("The truth Bible Game Questions and Answers.txt"));
+           Scanner in = new Scanner ( new FileReader("Questions.txt"));
           
             while(in.hasNext())
             {
