@@ -19,13 +19,9 @@ public class Game {
           
             while(in.hasNext())
             {
-            
                //is this a question?
-               int num =  in.nextInt();
-               
+               int num =  in.nextInt();  
                System.out.println(num);
-                
-            
             }
             
         } catch (IOException a) {
