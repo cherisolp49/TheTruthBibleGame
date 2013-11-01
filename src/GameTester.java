@@ -7,7 +7,7 @@ public class GameTester {
         Game new1 = new Game();
         
         
-        "This is BS"
+        String some = "This is BS.. maybe not";
         
     }
     
