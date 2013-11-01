@@ -1,6 +1,7 @@
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.*;
 //import java.io.File;
@@ -13,24 +14,26 @@ public class Game {
     
     Game()
     {
-        try {
+            try {
        
-           Scanner in = new Scanner ( new FileReader("Questions.txt"));
+           Scanner in = new Scanner ( new File("Questions.txt"));
           
-            while(in.hasNext())
-            {
-               //is this a question?
-               int num =  in.nextInt();  
-               System.out.println(num);
-            }
+         //  while(in.hasNext())
+         //   {
+              
+              int num =  in.nextInt();  
+              System.out.println("num is " + num );
+        //    }//eol
             
-        } catch (IOException a) {
-            System.out.println("Wrong Input file");
-        } 
-        catch (Exception b) {
-            System.out.println("Something else went wrong");
+           
+           in.close();//closing scanner
+           
+         } catch(FileNotFoundException b){ System.out.println("File Not Found ");}
+        catch (Exception d) {
+            System.out.println("Something else went wrong" + d.toString());
         }
-    }
+        
+    }//eoc
 
 
     }//eof
