@@ -9,7 +9,7 @@ public class Game {
 
     //array
     //question Number
-    //
+    //Game
     
     Game()
     {
