@@ -6,7 +6,7 @@ public class GameTester {
         
         Game new1 = new Game();
         
-        System.out.println("Hello world");
+        System.out.println("Hellofsgrgwe world");
         
         
     }
