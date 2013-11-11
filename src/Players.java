@@ -21,4 +21,8 @@ public class Players
     {
         return currentAnswer;
     }
+    public void incrementPoints(int points)
+    {
+        this.points = this.points + points;
+    }
 }
