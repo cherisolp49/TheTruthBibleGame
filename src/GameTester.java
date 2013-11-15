@@ -5,8 +5,8 @@ public class GameTester {
     {
         
         Game new1 = new Game();
-        
-        System.out.println("Hello YES IT WORKS world");
+        new1.printArray();
+//        System.out.println("Hello YES IT WORKS world");
         
         
     }
