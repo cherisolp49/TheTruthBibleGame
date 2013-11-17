@@ -7,63 +7,44 @@ import java.util.Scanner;
 public class Game {
 
     private String[][] list;  //col 1 for question, col2 for answer
-    //question Number
-    //Game
-
+   
     Game() {
 
         //construc the two dim array-questions & answers
-        this.list = new String[100][100];
+        this.list = new String[300][2];
 
         try {
 
             Scanner in = new Scanner(new File("Q&A.txt"));
-            int count = 1;
+
             String gTemp = ""; //temp string
             while (in.hasNext()) {
-
                 int num = in.nextInt();
-                // System.out.println("num is " + num );/////////////////////////
-
                 gTemp = in.next();//getting next line
-                //System.out.println( "gTemp is "+ gTemp );////////////////////
-
                 String question = "";
 
                 //get the question
                 while (!(gTemp.equalsIgnoreCase("#"))) {
-                //    System.out.println("gTemp " + gTemp);
+                  
                     //concatenate the sentence
                     question = question + " " + gTemp;
-                   // System.out.println("value is " + question);//////////////////////////////////
                     gTemp = in.next();
                 }//eo question
-                System.out.println("question is " + question);
-                this.list[num][count] = question; //save the question
+                  this.list[num][0] = question; //save the question
 
                 gTemp = in.next();//getting next line
                 String answer = "";
-                if (gTemp.equalsIgnoreCase("ans:")) {
-
-                    //get the answer
-                    while (!(gTemp.equalsIgnoreCase("#"))) {
-                    //    System.out.println("answer  " + answer);
-                        //concatenate the sentence
-                        answer = answer + " " + gTemp;
-                       // System.out.println("answer is " + answer);//////////////////////////////////
-                        gTemp = in.next();
-                    }//eo answer
+             
+                while (!(gTemp.equalsIgnoreCase("#"))) //get the answer
+                {
+                    //concatenate the sentence
+                    answer = answer + " " + gTemp;
+                      gTemp = in.next();
                 }//eo answer
-                this.list[count][num] = answer; //save the answer
-            count++;
+                this.list[num][1] = answer; //save the answer
             }//eol
-
             in.close();//closing scanner
-
-        
-           
-            
-            
+          //  System.out.println( printArray() ); //used this to test the array
         } catch (FileNotFoundException b) {
             System.out.println("File Not Found ");
         } catch (Exception d) {
@@ -74,24 +55,23 @@ public class Game {
 
 //method for creating a new game
 //test method for displaying
-    public   void printArray() {
-         System.out.println(this.list[0][0]);
-            System.out.println(this.list[0][1]);
-            System.out.println(this.list[1][0]);
-            System.out.println(this.list[1][1]);
-            System.out.println(this.list[2][1]);
-       /* 
-        String out = "";
-        for (int row = 0; row < this.list.length; row++) 
-        {
-            for (int col = 0; col < this.list[row].length; col++) {
-                
-                System.out.println("Question is "+ row + " answer is " + col);
-                        System.out.print(" "+this.list[row][col]);
+    
+    //this method is for testing the array 
+    private String printArray() {
+
+        String out = "NOW PRINTING THE LIST \n";
+        for (int row = 1; row < this.list.length; row++) {
+            for (int col = 1; col < this.list[row].length; col++) {
+
+                if (col == 0) {
+                    out = out + "Question " + row + " is " + this.list[row][col] + "\n";
+                } else {
+                    out += "Answer " + " is " + this.list[row][col] + "\n";
+                }
             }//eo col 
-            out += "\n";  }//eo row
+            out += "\n";
+        }//eo row
         return out;
-               
-               */
+
     }
 }//eof
