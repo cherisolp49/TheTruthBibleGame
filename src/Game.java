@@ -44,7 +44,7 @@ public class Game {
                 this.list[num][1] = answer; //save the answer
             }//eol
             in.close();//closing scanner
-          //  System.out.println( printArray() ); //used this to test the array
+          // System.out.println( printArray() ); //used this to test the array
         } catch (FileNotFoundException b) {
             System.out.println("File Not Found ");
         } catch (Exception d) {
@@ -60,8 +60,8 @@ public class Game {
     private String printArray() {
 
         String out = "NOW PRINTING THE LIST \n";
-        for (int row = 1; row < this.list.length; row++) {
-            for (int col = 1; col < this.list[row].length; col++) {
+        for (int row = 0; row < this.list.length; row++) {
+            for (int col = 0; col < this.list[row].length; col++) {
 
                 if (col == 0) {
                     out = out + "Question " + row + " is " + this.list[row][col] + "\n";
