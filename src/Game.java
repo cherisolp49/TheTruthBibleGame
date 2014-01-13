@@ -5,13 +5,13 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 import java.util.Random;
 
-public class BibleTruth {
+public class Game {
 
     private String[][] list;  //col 1 for question, col2 for answer
     private String option[] = new String[4];
     
    
-    BibleTruth() {
+    Game() {
         
         //construc the two dim array-questions & answers
         this.list = new String[6][5];
