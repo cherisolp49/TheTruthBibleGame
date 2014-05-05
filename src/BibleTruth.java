@@ -5,16 +5,20 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 import java.util.Random;
 
-public class Game {
+public class BibleTruth {
 
     private String[][] list;  //col 1 for question, col2 for answer
     private String option[] = new String[4];
+    private int oldQues[]; //being created to ensure no duplicate questions
+    private boolean duplicated;
+
     
    
-    Game() {
+    BibleTruth() {
         
         //construc the two dim array-questions & answers
-        this.list = new String[6][5];
+        this.list = new String[8][5];
+        this.oldQues = new int[list.length];
 
         try {
 
@@ -111,29 +115,53 @@ public class Game {
         System.out.println(out);
         return out;
 
-    }
+    }//end of printArray
      public void randomQuestionGenerator()
     {
         Random r = new Random();
-        int num = 0;  //question number from the text file;
-        int count = 0;  //the current question number; starting from 0 to end
-        for(int i=0; i<this.list.length; i++)
+        int num = 0;  //random question number from the text file;
+        int count = 1;  //the current question number; starting from 1 to end
+
+        for(int i=0; i<this.list.length-1; i++)
         {
-            count++;
-            num = 1 + r.nextInt(this.list.length - 1); //random question number    just testing uncomment!!!
-            System.out.println(count + "\t" + num);
+            num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
+            if(i==0)//making sure that we are not going to have duplicate questions
+            {
+                oldQues[0] = num;
+            }
+            else
+            {
+                /*
+                @param if the number isnt a duplicate, then the while statement is false and its automatically exited, if it is 
+                a duplicate then it enters into the while statement until it isnt
+                */
+                while(this.isNumADuplicateQues(num))//fix this, instead dont allow program to enter this method use boolean instead
+             //   while(!duplicated)
+                {
+                    num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
+                    this.isNumADuplicateQues(num);
+
+                }
+                oldQues[i] = num;
+                
+            }
             String choice = getMultipleQuestions(num);
             getQuestions(num, count, choice);
-        }        
+            count++;
 
-    }
+        }//end of for loop
+        JOptionPane.showMessageDialog(null, "Congratulations!! You have successfully learned some things today!\nCome back and play again another time! God bless! ");
+
+    }//end of randomQuestionGenerator
       public void getQuestions(int num, int count, String choices)
     {
         
-        String ques = this.list[num][0] + "\n" + choices; 
+        String ques = this.list[num][0] + "\n" + choices;
+        JOptionPane.showMessageDialog(null, this.list[num][0] + "\n(Click ok to see the choices)");
+        //the code above asks the question w/o multiple choice
         String input = JOptionPane.showInputDialog(null, ques, "Question " + count, 3);
         //pass the input to the method checkAnswer(input);
-        if(checkAnswer(input, num))
+        if(checkAnswer(input, num))//if answer is correct
         {
             JOptionPane.showMessageDialog(null, "You Got It Right!!!");
         }
@@ -141,22 +169,26 @@ public class Game {
         {
             JOptionPane.showMessageDialog(null, "Sorry, but it looks like you were wrong.");
         }
-    }
+    }//end of getQuestions
+      /*
+      @param number is the number of a random question that will be extracted
+      from the text file
+      */
       public String getMultipleQuestions(int number)
       {
         option = new String[4];
         Random rand = new Random();
-        int e;
-        int counter = 1;
+        int e;  //random number
+        int counter = 1;    //counter is the number representing the multiple choice options
+        //there are 4 options and the counter represents each one
         
         for (int i = 0; i < option.length; i++) 
         {
-            e = rand.nextInt(4);
+            e = rand.nextInt(4);    //random number from 0-3
                 
             if(option[e] == null)
             {
-                //option[e] = "Question number " + counter;//extract multiple choice options from text and isert here!!!!
-                option[e] = this.list[number][counter]; //testing this out if it works delete the one on top....its extracting the MCQs??
+                option[e] = this.list[number][counter]; //its extracting the MCOptions
                 counter++;
             }
             else
@@ -182,47 +214,69 @@ public class Game {
         String choice = "A) " + option[0] + "\nB) " + option[1] + "\nC) " + option[2] + "\nD) " + option[3] + "\n";
         
         return choice;
-      }//end of multiple choice
+      }//end of getMultipleQuestions
       
       public boolean checkAnswer(String input, int num)
       {
           boolean correct = false;
           
-          switch(input)
-          {
-              case "A":
-                  if(option[0].equals(this.list[num][1])) //comparing the random question in option[0] to the actual answer of the question
-                  {
-                      correct = true;
-                  }
-                  break;
+         if(input.equalsIgnoreCase("A"))
+         {
+             if(option[0].equals(this.list[num][1])) //comparing the random question in option[0] to the actual answer of the question
+             {
+                  correct = true;
+             }
+         }
+         else if(input.equalsIgnoreCase("B"))
+         {
+             if(option[1].equals(this.list[num][1]))//comparing the random question in option[1] to the actual answer of the question
+             {
+                 correct = true;
+             }
+         }
+         else if(input.equalsIgnoreCase("C"))
+         {
              
-              case "B":
-                  if(option[1].equals(this.list[num][1]))//comparing the random question in option[0] to the actual answer of the question
-                  {
-                      correct = true;
-                  }
-                  break;
-              
-              case "C":
-                  if(option[2].equals(this.list[num][1]))//comparing the random question in option[0] to the actual answer of the question
-                  {
-                      correct = true;
-                  }
-                  break;
-              
-              case "D":
-                  if(option[3].equals(this.list[num][1]))//comparing the random question in option[0] to the actual answer of the question
-                  {
-                      correct = true;
-                  }
-                  break;
-               
-               default:
-                   System.out.println("Invalid Input");
-                   break;
-          }
-          
+             if(option[2].equals(this.list[num][1]))//comparing the random question in option[2] to the actual answer of the question
+             {
+                  correct = true;
+             }
+         }
+         else if(input.equalsIgnoreCase("D"))
+         {
+              if(option[3].equals(this.list[num][1]))//comparing the random question in option[3] to the actual answer of the question
+              {
+                  correct = true;
+              }
+         }
+         else
+         {
+              JOptionPane.showMessageDialog(null, "Invalid Input");//////////////Delete!!!!
+         }
           return correct;
+      }//end of checkAnswer
+      /*
+      @param testing for duplicated questions. dupNumCheck is the number of
+      the question being checked to see if it hasnt already occured
+      */
+      public boolean isNumADuplicateQues(int dupNumCheck)
+      {
+          duplicated = false;
+          int k = 0;
+          //oldQues[k] can't equal 0 unless it hasnt yet been assigned a number, duoNumCheck will 
+          //always be > 0 since the question numbers start from 1 to the end
+          while(oldQues[k] != 0) 
+          {
+              if(oldQues[k] == dupNumCheck)
+              {
+                  duplicated = true;
+                  break;
+              }
+              else
+              {
+                  k++;
+              }
+          }
+          return duplicated;
       }
 }//eof
