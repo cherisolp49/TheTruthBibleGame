@@ -13,16 +13,19 @@ public class BibleTruth {
     private boolean duplicated;
 
     
+   /*
+    @param passing the name of the file
+   */
    
-    BibleTruth() {
+    BibleTruth(String file) {
         
-        //construc the two dim array-questions & answers
+        //construct the two dim array-questions & answers
         this.list = new String[8][5];
         this.oldQues = new int[list.length];
 
         try {
 
-            Scanner in = new Scanner(new File("Q&A.txt"));
+            Scanner in = new Scanner(new File(file));
 
             String gTemp = ""; //temp string
             while (in.hasNext()) {
