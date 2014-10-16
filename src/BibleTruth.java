@@ -1,9 +1,13 @@
+package Gameplay;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 import java.util.Random;
+import java.util.Date;
 
 public class BibleTruth {
 
@@ -11,20 +15,19 @@ public class BibleTruth {
     private String option[] = new String[4];
     private int oldQues[]; //being created to ensure no duplicate questions
     private boolean duplicated;
+    Players player;
 
     
    /*
     @param passing the name of the file
-   */
-   
+    */
     BibleTruth(String file) {
         
         //construct the two dim array-questions & answers
-        this.list = new String[8][5];
+        this.list = new String[10][7];
         this.oldQues = new int[list.length];
 
         try {
-
             Scanner in = new Scanner(new File(file));
 
             String gTemp = ""; //temp string
@@ -85,7 +88,29 @@ public class BibleTruth {
                     gTemp = in.next();
                 }//eo option4
                 this.list[num][4] = option4; //save the answer
-    /////////////////////////////////////////////////////////////////////////////ending multiple choice            
+///////////////////////ending multiple choice-----Starting Reference/////////////////////////////////
+                 gTemp = in.next();//getting next line
+                String reference = "";
+             
+                while (!(gTemp.equalsIgnoreCase("#"))) //get the answer
+                {
+                    //concatenate the sentence
+                    reference = reference + " " + gTemp;
+                    gTemp = in.next();
+                }//eo reference
+                this.list[num][5] = reference; //save the answer
+////////////////////////Level of Difficulty//////////////////////////////////////////////
+                gTemp = in.next();//getting next line
+                String levelOfDiff = "";
+             
+                while (!(gTemp.equalsIgnoreCase("#"))) //get the answer
+                {
+                    //concatenate the sentence
+                    levelOfDiff = levelOfDiff + " " + gTemp;
+                    gTemp = in.next();
+                }//eo option4
+                this.list[num][6] = levelOfDiff; //save the levelofDiff
+                
             }//eol
             in.close();//closing scanner
           //System.out.println( printArray() ); //used this to test the array
@@ -124,11 +149,13 @@ public class BibleTruth {
         Random r = new Random();
         int num = 0;  //random question number from the text file;
         int count = 1;  //the current question number; starting from 1 to end
+        String name = GetData.getWord("Enter your name");
+        player = new Players(name);
 
         for(int i=0; i<this.list.length-1; i++)
         {
             num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
-            if(i==0)//making sure that we are not going to have duplicate questions
+            if(i==0)//filling in the first array index with the first question
             {
                 oldQues[0] = num;
             }
@@ -138,7 +165,7 @@ public class BibleTruth {
                 @param if the number isnt a duplicate, then the while statement is false and its automatically exited, if it is 
                 a duplicate then it enters into the while statement until it isnt
                 */
-                while(this.isNumADuplicateQues(num))//fix this, instead dont allow program to enter this method use boolean instead
+                while(this.isNumADuplicateQues(num))//making sure that we are not going to have duplicate questions
              //   while(!duplicated)
                 {
                     num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
@@ -158,7 +185,8 @@ public class BibleTruth {
     }//end of randomQuestionGenerator
       public void getQuestions(int num, int count, String choices)
     {
-        
+        String result = "";
+        String gTemp = "";
         String ques = this.list[num][0] + "\n" + choices;
         JOptionPane.showMessageDialog(null, this.list[num][0] + "\n(Click ok to see the choices)");
         //the code above asks the question w/o multiple choice
@@ -166,11 +194,21 @@ public class BibleTruth {
         //pass the input to the method checkAnswer(input);
         if(checkAnswer(input, num))//if answer is correct
         {
-            JOptionPane.showMessageDialog(null, "You Got It Right!!!");
+            JOptionPane.showMessageDialog(null, "You Got It Right!!!\nReference: " + this.list[num][5]);
+            //System.out.println(this.list[num][6] + "testing!!!!!!!!!!!fcdwfdsafdsa");
+            //player.incrementPoints(this.list[num][6]); //determines how much points player gets for correct response
+            gTemp = count + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
+                    + " [You got this question correct!!!!]";
+            result = gTemp + " " + result;
+            player.viewResults(result);
         }
         else
         {
-            JOptionPane.showMessageDialog(null, "Sorry, but it looks like you were wrong.");
+            JOptionPane.showMessageDialog(null, "Sorry, but it looks like you were wrong.\nReference: " + this.list[num][5]);
+            gTemp = count + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
+                    + " [You got this question incorrect]";
+            result = gTemp + " " + result;
+            player.viewResults(result);
         }
     }//end of getQuestions
       /*
@@ -266,7 +304,7 @@ public class BibleTruth {
       {
           duplicated = false;
           int k = 0;
-          //oldQues[k] can't equal 0 unless it hasnt yet been assigned a number, duoNumCheck will 
+          //oldQues[k] can't equal 0 unless it hasnt yet been assigned a number, dupNumCheck will 
           //always be > 0 since the question numbers start from 1 to the end
           while(oldQues[k] != 0) 
           {
@@ -281,5 +319,12 @@ public class BibleTruth {
               }
           }
           return duplicated;
+      }
+      public void openFile() throws IOException
+      {
+          Runtime rt=Runtime.getRuntime();
+          
+          String file = "C:\\Users\\Patrick\\Documents\\NetBeansProjects\\TheTruthBibleGame\\testthisfilething1.txt";
+          Process p = rt.exec("notepad " + file);
       }
 }//eof
