@@ -13,7 +13,7 @@ public class BibleTruth {
 
     private String[][] list;  //col 1 for question, col2 for answer
     private String option[] = new String[4];
-    private int oldQues[]; //being created to ensure no duplicate questions
+    private int oldQues[], quesCount=1; //oldQues - being created to ensure no duplicate questions, quesCount - curr number start from 1
     private boolean duplicated;
     Players player;
 
@@ -24,7 +24,7 @@ public class BibleTruth {
     BibleTruth(String file) {
         
         //construct the two dim array-questions & answers
-        this.list = new String[10][7];
+        this.list = new String[3][7];
         this.oldQues = new int[list.length];
 
         try {
@@ -144,20 +144,19 @@ public class BibleTruth {
         return out;
 
     }//end of printArray
-     public void randomQuestionGenerator()
+     public int randomQuestionGenerator()
     {
         Random r = new Random();
-        int num = 0;  //random question number from the text file;
-        int count = 1;  //the current question number; starting from 1 to end
+        int randNum = 0;  //random question number from the text file;
         String name = GetData.getWord("Enter your name");
         player = new Players(name);
 
         for(int i=0; i<this.list.length-1; i++)
         {
-            num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
+            randNum = 1 + r.nextInt(this.list.length - 1); //gets a random question number
             if(i==0)//filling in the first array index with the first question
             {
-                oldQues[0] = num;
+                oldQues[0] = randNum;
             }
             else
             {
@@ -165,39 +164,39 @@ public class BibleTruth {
                 @param if the number isnt a duplicate, then the while statement is false and its automatically exited, if it is 
                 a duplicate then it enters into the while statement until it isnt
                 */
-                while(this.isNumADuplicateQues(num))//making sure that we are not going to have duplicate questions
+                while(this.isNumADuplicateQues(randNum))//making sure that we are not going to have duplicate questions
              //   while(!duplicated)
                 {
-                    num = 1 + r.nextInt(this.list.length - 1); //gets a random question number
-                    this.isNumADuplicateQues(num);
+                    randNum = 1 + r.nextInt(this.list.length - 1); //gets a random question number
+                    this.isNumADuplicateQues(randNum);
 
                 }
-                oldQues[i] = num;
+                oldQues[i] = randNum;
                 
             }
-            String choice = getMultipleQuestions(num);
-            getQuestions(num, count, choice);
-            count++;
+            //String choice = getMultipleQuestions(randNum);
+            //getQuestions(randNum, choice);
 
         }//end of for loop
-        JOptionPane.showMessageDialog(null, "Congratulations!! You have successfully learned some things today!\nCome back and play again another time! God bless! ");
-
+        return randNum;
     }//end of randomQuestionGenerator
-      public void getQuestions(int num, int count, String choices)
+      public void getQuestions()
     {
         String result = "";
         String gTemp = "";
+        int num = randomQuestionGenerator();
+        String choices =  getMultipleQuestions(num);
         String ques = this.list[num][0] + "\n" + choices;
         JOptionPane.showMessageDialog(null, this.list[num][0] + "\n(Click ok to see the choices)");
         //the code above asks the question w/o multiple choice
-        String input = JOptionPane.showInputDialog(null, ques, "Question " + count, 3);
+        String input = JOptionPane.showInputDialog(null, ques, "Question " + quesCount, 3); //just changed count to quesCount
         //pass the input to the method checkAnswer(input);
         if(checkAnswer(input, num))//if answer is correct
         {
             JOptionPane.showMessageDialog(null, "You Got It Right!!!\nReference: " + this.list[num][5]);
             //System.out.println(this.list[num][6] + "testing!!!!!!!!!!!fcdwfdsafdsa");
             //player.incrementPoints(this.list[num][6]); //determines how much points player gets for correct response
-            gTemp = count + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
+            gTemp = quesCount + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
                     + " [You got this question correct!!!!]";
             result = gTemp + " " + result;
             player.viewResults(result);
@@ -205,11 +204,12 @@ public class BibleTruth {
         else
         {
             JOptionPane.showMessageDialog(null, "Sorry, but it looks like you were wrong.\nReference: " + this.list[num][5]);
-            gTemp = count + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
+            gTemp = quesCount + " " + this.list[num][0] + " " + "The answer is: " + this.list[num][1]
                     + " [You got this question incorrect]";
             result = gTemp + " " + result;
             player.viewResults(result);
         }
+        quesCount++;
     }//end of getQuestions
       /*
       @param number is the number of a random question that will be extracted
